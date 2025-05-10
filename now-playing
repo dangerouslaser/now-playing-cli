@@ -12,10 +12,31 @@ CYAN="\033[1;36m"
 WHITE="\033[1;37m"
 NC="\033[0m"
 
-# === ARGUMENT PARSING ===
+# === ARGUMENT FLAGS ===
 REBOOT_REQUESTED=false
-if [[ "$1" == "--reboot" ]]; then
-  REBOOT_REQUESTED=true
+SHOW_LIBRARY=false
+
+for arg in "$@"; do
+  case $arg in
+    --reboot)
+      REBOOT_REQUESTED=true
+      ;;
+    --library)
+      SHOW_LIBRARY=true
+      ;;
+  esac
+done
+
+# === HANDLE LIBRARY STATS ===
+if [ "$SHOW_LIBRARY" = true ]; then
+  echo -e "${CYAN}Fetching Plex library stats...${NC}"
+  lib_json=$(curl -s "${TAUTULLI_URL}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_libraries")
+
+  echo "$lib_json" | jq -r '.response.data[] | "\(.section_name) (\(.section_type)) - \(.count) items"' | while read -r line; do
+    echo -e " - ${GREEN}${line}${NC}"
+  done
+
+  echo
 fi
 
 # === FETCH SESSION DATA ===
