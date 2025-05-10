@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # === CONFIGURATION ===
-TAUTULLI_API_KEY="aac1385a26c647a9a6d462249c1ec3d8"
+TAUTULLI_API_KEY="yourapikey"
 TAUTULLI_URL="http://localhost:8181"
 
 # === COLORS ===
