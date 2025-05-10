@@ -1,13 +1,15 @@
 #!/bin/bash
 
 # === CONFIGURATION ===
-TAUTULLI_API_KEY="yourapikey"
+TAUTULLI_API_KEY="aac1385a26c647a9a6d462249c1ec3d8"
 TAUTULLI_URL="http://localhost:8181"
 
 # === COLORS ===
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
+BLUE="\033[0;34m"
+PURPLE="\033[0;35m"
 CYAN="\033[1;36m"
 WHITE="\033[1;37m"
 NC="\033[0m"
@@ -15,17 +17,37 @@ NC="\033[0m"
 # === ARGUMENT FLAGS ===
 REBOOT_REQUESTED=false
 SHOW_LIBRARY=false
+SHOW_HELP=false
 
 for arg in "$@"; do
   case $arg in
     --reboot)
       REBOOT_REQUESTED=true
       ;;
-    --library)
+    --library|-l)
       SHOW_LIBRARY=true
+      ;;
+    --help|-h)
+      SHOW_HELP=true
       ;;
   esac
 done
+
+# === FUNCTION: Format Seconds to HH:MM:SS ===
+format_time() {
+  local seconds=$1
+  printf '%02d:%02d:%02d' $((seconds / 3600)) $((seconds % 3600 / 60)) $((seconds % 60))
+}
+
+# === HANDLE HELP FLAG ===
+if [ "$SHOW_HELP" = true ]; then
+  echo -e "${CYAN}Usage: now-playing [OPTIONS]${NC}"
+  echo -e "\nOptions:"
+  echo -e "  ${GREEN}--reboot${NC}          Prompt to reboot the system if no streams are active (warn if active)."
+  echo -e "  ${GREEN}-l, --library${NC}     Show Plex library statistics."
+  echo -e "  ${GREEN}-h, --help${NC}        Display this help message."
+  exit 0
+fi
 
 # === HANDLE LIBRARY STATS ===
 if [ "$SHOW_LIBRARY" = true ]; then
@@ -35,20 +57,22 @@ if [ "$SHOW_LIBRARY" = true ]; then
   echo "$lib_json" | jq -r '.response.data[] | "\(.section_name) (\(.section_type)) - \(.count) items"' | while read -r line; do
     echo -e " - ${GREEN}${line}${NC}"
   done
-
   echo
+  exit 0
 fi
 
 # === FETCH SESSION DATA ===
 json=$(curl -s "${TAUTULLI_URL}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_activity")
 active_streams=$(echo "$json" | jq '.response.data.sessions | length')
 
-# === DISPLAY ACTIVE SESSIONS OR REBOOT HANDLING ===
+# === DISPLAY ACTIVE SESSIONS OR HANDLE REBOOT ===
 if [[ "$active_streams" -eq 0 ]]; then
   echo -e "${GREEN}No active sessions.${NC}"
 else
+  echo -e "${YELLOW}---------------------------------------------${NC}"
   echo -e "${GREEN}${active_streams} active session(s)${NC}"
   echo -e "${YELLOW}---------------------------------------------${NC}"
+
   echo "$json" | jq -c '.response.data.sessions[]' | while read -r session; do
     user=$(echo "$session" | jq -r '.user')
     location=$(echo "$session" | jq -r '.stream_location')
@@ -62,28 +86,37 @@ else
     transcode_decision=$(echo "$session" | jq -r '.transcode_decision')
     video_decision=$(echo "$session" | jq -r '.video_decision')
     audio_decision=$(echo "$session" | jq -r '.audio_decision')
+    view_offset=$(echo "$session" | jq -r '.view_offset')
+    duration=$(echo "$session" | jq -r '.duration')
 
     echo -e "${RED}User:${NC} $user"
-#    echo -e "${GREEN}Location:${NC} ${location} (secure)"
-#    echo -e "${YELLOW}IP:${NC} $ip"
     echo -e "${CYAN}Type:${NC} $type"
     echo -e "${WHITE}Title:${NC} $title"
     echo -e "${RED}State:${NC} $state"
+
+    if [[ "$duration" != "null" && "$view_offset" != "null" ]]; then
+      current_seconds=$((view_offset / 1000))
+      total_seconds=$((duration / 1000))
+      current_time=$(format_time "$current_seconds")
+      total_time=$(format_time "$total_seconds")
+      echo -e "${PURPLE}Progress:${NC} $current_time / $total_time"
+    fi
+
     echo -e "${GREEN}Player:${NC} ${player} - ${platform} ${version}"
 
-if [ "$transcode_decision" = "transcode" ]; then
-  if [ "$video_decision" = "transcode" ] && [ "$audio_decision" = "transcode" ]; then
-    stream_info="${RED}Transcode: Audio + Video${NC}"
-  elif [ "$video_decision" = "transcode" ]; then
-    stream_info="${YELLOW}Transcode: Video only${NC}"
-  elif [ "$audio_decision" = "transcode" ]; then
-    stream_info="${YELLOW}Transcode: Audio only${NC}"
-  else
-    stream_info="${YELLOW}Transcode (unspecified)${NC}"
-  fi
-else
-  stream_info="${GREEN}${transcode_decision^}${NC}"
-fi
+    if [ "$transcode_decision" = "transcode" ]; then
+      if [ "$video_decision" = "transcode" ] && [ "$audio_decision" = "transcode" ]; then
+        stream_info="${RED}Transcode: Audio + Video${NC}"
+      elif [ "$video_decision" = "transcode" ]; then
+        stream_info="${YELLOW}Transcode: Video only${NC}"
+      elif [ "$audio_decision" = "transcode" ]; then
+        stream_info="${YELLOW}Transcode: Audio only${NC}"
+      else
+        stream_info="${YELLOW}Transcode (unspecified)${NC}"
+      fi
+    else
+      stream_info="${GREEN}${transcode_decision^}${NC}"
+    fi
 
     echo -e "${CYAN}Stream:${NC} $stream_info"
     echo -e "${YELLOW}---------------------------------------------${NC}"
