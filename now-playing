@@ -59,6 +59,9 @@ else
     player=$(echo "$session" | jq -r '.player')
     platform=$(echo "$session" | jq -r '.platform')
     version=$(echo "$session" | jq -r '.product_version')
+    transcode_decision=$(echo "$session" | jq -r '.transcode_decision')
+    video_decision=$(echo "$session" | jq -r '.video_decision')
+    audio_decision=$(echo "$session" | jq -r '.audio_decision')
 
     echo -e "${RED}User:${NC} $user"
 #    echo -e "${GREEN}Location:${NC} ${location} (secure)"
@@ -67,6 +70,22 @@ else
     echo -e "${WHITE}Title:${NC} $title"
     echo -e "${RED}State:${NC} $state"
     echo -e "${GREEN}Player:${NC} ${player} - ${platform} ${version}"
+
+if [ "$transcode_decision" = "transcode" ]; then
+  if [ "$video_decision" = "transcode" ] && [ "$audio_decision" = "transcode" ]; then
+    stream_info="${RED}Transcode: Audio + Video${NC}"
+  elif [ "$video_decision" = "transcode" ]; then
+    stream_info="${YELLOW}Transcode: Video only${NC}"
+  elif [ "$audio_decision" = "transcode" ]; then
+    stream_info="${YELLOW}Transcode: Audio only${NC}"
+  else
+    stream_info="${YELLOW}Transcode (unspecified)${NC}"
+  fi
+else
+  stream_info="${GREEN}${transcode_decision^}${NC}"
+fi
+
+    echo -e "${CYAN}Stream:${NC} $stream_info"
     echo -e "${YELLOW}---------------------------------------------${NC}"
   done
 fi
