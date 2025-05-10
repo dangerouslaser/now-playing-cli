@@ -1,11 +1,19 @@
-Script to pull currently playing information from tautulli API.
+<h1>Script to pull currently playing information from tautulli API.</h1>
 
 <b>Download the script</b>
 
-(https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing)
+https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing
 
-Make it executable (sudo chmod +x now-playing)
+<b>Make it executable</b>
 
-Add your tautulli API key and URL
+sudo chmod +x now-playing
 
-Move to /usr/local/bin/ (sudo mv ./now-playing /usr/local/bin)
+<b>Add your tautulli API key and URL</b>
+
+<b>Move to /usr/local/bin/</b>
+
+sudo mv ./now-playing /usr/local/bin
+
+<b>Run with now-playing</b>
+
+now-playing
