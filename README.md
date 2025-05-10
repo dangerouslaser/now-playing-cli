@@ -8,7 +8,7 @@ wget https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing
 
 <b>Make it executable</b>
 
-sudo chmod +x now-playing
+<code>sudo chmod +x now-playing</code>
 
 <b>Add your tautulli API key and URL</b>
 
