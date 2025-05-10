@@ -25,7 +25,7 @@
 
 <code>now-playing</code>
 
-<b>Check for acive sessions and reboot</b>
+<b>Check for active sessions and reboot</b>
 
 <code>now-playing --reboot</code>
 
