@@ -1,7 +1,7 @@
 <h1>Now Playing</h1>
 <h2>Script to pull currently playing and library information from tautulli API.</h2>
 
-<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-updated.png">
+<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-latest.png">
 
 <b>Download the script</b>
 
@@ -32,5 +32,3 @@
 <b>Check for active sessions and reboot</b>
 
 <code>now-playing --reboot</code>
-
-
