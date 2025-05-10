@@ -4,7 +4,7 @@
 
 <b>Download the script</b>
 
-https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing
+wget https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing
 
 <b>Make it executable</b>
 
