@@ -29,4 +29,6 @@
 
 <code>now-playing --reboot</code>
 
-<b>
+<b>Show Library Stats</b>
+
+<code>now-playing --library</code>
