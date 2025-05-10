@@ -12,30 +12,58 @@ CYAN="\033[1;36m"
 WHITE="\033[1;37m"
 NC="\033[0m"
 
-echo -e "${NC}"
+# === ARGUMENT PARSING ===
+REBOOT_REQUESTED=false
+if [[ "$1" == "--reboot" ]]; then
+  REBOOT_REQUESTED=true
+fi
 
-# === FETCH AND PARSE ===
+# === FETCH SESSION DATA ===
 json=$(curl -s "${TAUTULLI_URL}/api/v2?apikey=${TAUTULLI_API_KEY}&cmd=get_activity")
 active_streams=$(echo "$json" | jq '.response.data.sessions | length')
-echo -e "${GREEN}${active_streams} active sessions${NC}\n"
 
-# === LOOP THROUGH SESSIONS ===
-echo "$json" | jq -c '.response.data.sessions[]' | while read -r session; do
-  user=$(echo "$session" | jq -r '.user')
-  location=$(echo "$session" | jq -r '.stream_location')
-  ip=$(echo "$session" | jq -r '.ip_address')
-  type=$(echo "$session" | jq -r '.media_type')
-  title=$(echo "$session" | jq -r '.full_title')
-  state=$(echo "$session" | jq -r '.state')
-  player=$(echo "$session" | jq -r '.player')
-  platform=$(echo "$session" | jq -r '.platform')
-  version=$(echo "$session" | jq -r '.product_version')
-  thumbnail=$(echo "$session" | jq -r '.thumb' | sed 's/\\//g')
+# === DISPLAY ACTIVE SESSIONS OR REBOOT HANDLING ===
+if [[ "$active_streams" -eq 0 ]]; then
+  echo -e "${GREEN}No active sessions.${NC}"
+else
+  echo -e "${GREEN}${active_streams} active session(s)${NC}"
+  echo -e "${YELLOW}---------------------------------------------${NC}"
+  echo "$json" | jq -c '.response.data.sessions[]' | while read -r session; do
+    user=$(echo "$session" | jq -r '.user')
+    location=$(echo "$session" | jq -r '.stream_location')
+    ip=$(echo "$session" | jq -r '.ip_address')
+    type=$(echo "$session" | jq -r '.media_type')
+    title=$(echo "$session" | jq -r '.full_title')
+    state=$(echo "$session" | jq -r '.state')
+    player=$(echo "$session" | jq -r '.player')
+    platform=$(echo "$session" | jq -r '.platform')
+    version=$(echo "$session" | jq -r '.product_version')
 
-  echo -e "${CYAN}User:${NC} $user"
-  echo -e "${RED}Type:${NC} $type"
-  echo -e "${GREEN}Title:${NC} $title"
-  echo -e "${YELLOW}State:${NC} $state"
-  echo -e "${WHITE}Player:${NC} ${player} - ${platform} ${version}"
-  echo -e ""
-done
+    echo -e "${RED}User:${NC} $user"
+#    echo -e "${GREEN}Location:${NC} ${location} (secure)"
+#    echo -e "${YELLOW}IP:${NC} $ip"
+    echo -e "${CYAN}Type:${NC} $type"
+    echo -e "${WHITE}Title:${NC} $title"
+    echo -e "${RED}State:${NC} $state"
+    echo -e "${GREEN}Player:${NC} ${player} - ${platform} ${version}"
+    echo -e "${YELLOW}---------------------------------------------${NC}"
+  done
+fi
+
+# === OPTIONAL REBOOT PROMPT ===
+if [ "$REBOOT_REQUESTED" = true ]; then
+  echo
+  if [[ "$active_streams" -gt 0 ]]; then
+    echo -e "${RED}Warning: Rebooting now will kill all active Plex streams!${NC}"
+  else
+    echo -e "${YELLOW}No active sessions. Safe to reboot.${NC}"
+  fi
+  echo -ne "${YELLOW}Would you like to reboot the system now? (y/N): ${NC}"
+  read -r confirm
+  if [[ "$confirm" =~ ^[Yy]$ ]]; then
+    echo -e "${RED}Rebooting...${NC}"
+    sudo reboot
+  else
+    echo -e "${CYAN}Reboot cancelled.${NC}"
+  fi
+fi
