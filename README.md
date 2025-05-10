@@ -12,6 +12,8 @@ sudo chmod +x now-playing
 
 <b>Add your tautulli API key and URL</b>
 
+sudo nano ./now-playing
+
 <b>Move to /usr/local/bin/</b>
 
 sudo mv ./now-playing /usr/local/bin
