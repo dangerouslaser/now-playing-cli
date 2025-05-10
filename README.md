@@ -1,23 +1,24 @@
-<h1>Script to pull currently playing information from tautulli API.</h1>
+<h1>Now Playing</h1>
+<h2>Script to pull currently playing information from tautulli API.</h2>
 
 <img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing.png">
 
 <b>Download the script</b>
 
-wget https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing
+<code>wget https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing</code>
 
 <b>Make it executable</b>
 
-<code>sudo chmod +x now-playing</code>
+<code>sudo chmod +x ./now-playing</code>
 
 <b>Add your tautulli API key and URL</b>
 
-sudo nano ./now-playing
+<code>sudo nano ./now-playing</code>
 
 <b>Move to /usr/local/bin/</b>
 
-sudo mv ./now-playing /usr/local/bin
+<code>sudo mv ./now-playing /usr/local/bin</code>
 
 <b>Run with now-playing</b>
 
-now-playing
+<code>now-playing</code>
