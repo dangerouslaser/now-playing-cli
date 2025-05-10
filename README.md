@@ -1,7 +1,7 @@
 <h1>Now Playing</h1>
 <h2>Script to pull currently playing and library information from tautulli API.</h2>
 
-<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing.png">
+<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-updated.png">
 
 <b>Download the script</b>
 
