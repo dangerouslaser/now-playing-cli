@@ -19,6 +19,14 @@
 
 <code>sudo mv ./now-playing /usr/local/bin</code>
 
+<h3>Usage</h3>
+
 <b>Run with now-playing</b>
 
 <code>now-playing</code>
+
+<b>Check for acive sessions and reboot</b>
+
+<code>now-playing --reboot</code>
+
+<b>
