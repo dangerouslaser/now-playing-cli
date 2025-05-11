@@ -37,4 +37,7 @@
 
 <b>Check for active sessions and reboot</b>
 
+
+<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-reboot.png">
+
 <code>now-playing --reboot</code>
