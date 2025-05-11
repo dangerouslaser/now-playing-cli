@@ -31,6 +31,8 @@
 
 <b>Show Library Stats</b>
 
+<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-library.png">
+
 <code>now-playing --library</code>
 
 <b>Check for active sessions and reboot</b>
