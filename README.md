@@ -25,6 +25,10 @@
 
 <code>now-playing</code>
 
+<b>Monitor sessions and progress in real time</b>
+
+<code>now-playing --watch</code>
+
 <b>Show Library Stats</b>
 
 <code>now-playing --library</code>
