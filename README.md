@@ -27,6 +27,8 @@
 
 <b>Monitor sessions and progress in real time</b>
 
+<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-watch.png">
+
 <code>now-playing --watch</code>
 
 <b>Show Library Stats</b>
