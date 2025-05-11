@@ -22,24 +22,18 @@
 <h3>Usage</h3>
 
 <b>Run with now-playing</b>
-
 <code>now-playing</code>
 
 <b>Monitor sessions and progress in real time</b>
-
+<code>now-playing --watch</code>
 <img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-watch.png">
 
-<code>now-playing --watch</code>
-
 <b>Show Library Stats</b>
-
+<code>now-playing --library</code>
 <img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-library.png">
 
-<code>now-playing --library</code>
-
 <b>Check for active sessions and reboot</b>
-
-
+<code>now-playing --reboot</code>
 <img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-reboot.png">
 
-<code>now-playing --reboot</code>
+
