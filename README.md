@@ -1,8 +1,19 @@
 # Now Playing CLI
 
+[![PyPI version](https://img.shields.io/pypi/v/now-playing-cli.svg)](https://pypi.org/project/now-playing-cli/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+
 A modern CLI tool to monitor Plex activity via the Tautulli API.
 
 ![now-playing](now-playing-latest.png)
+
+## Quick Start
+
+```bash
+pipx install now-playing-cli
+now-playing config
+now-playing
+```
 
 ## Features
 
