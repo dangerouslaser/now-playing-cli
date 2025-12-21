@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "now-playing-cli"
+version = "2.0.0"
+description = "CLI tool to monitor Plex activity via Tautulli API"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    { name = "dangerouslaser" }
+]
+keywords = ["plex", "tautulli", "cli", "media", "streaming"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Video",
+]
+dependencies = [
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "httpx>=0.25.0",
+]
+
+[project.optional-dependencies]
+keyring = ["keyring>=24.0.0"]
+
+[project.scripts]
+now-playing = "now_playing.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/dangerouslaser/now-playing-cli"
+Repository = "https://github.com/dangerouslaser/now-playing-cli"
+Issues = "https://github.com/dangerouslaser/now-playing-cli/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/now_playing"]

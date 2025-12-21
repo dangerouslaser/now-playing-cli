@@ -1,39 +1,136 @@
-<h1>Now Playing</h1>
-<h2>Script to pull currently playing and library information from tautulli API.</h2>
+# Now Playing CLI
 
-<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-latest.png">
+A modern CLI tool to monitor Plex activity via the Tautulli API.
 
-<b>Download the script</b>
+![now-playing](now-playing-latest.png)
 
-<code>wget https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing</code>
+## Features
 
-<b>Make it executable</b>
+- **Real-time monitoring** - Watch active streams with live progress updates
+- **Library statistics** - View item counts across all Plex libraries
+- **Secure configuration** - API keys stored in system keychain (or config file with restricted permissions)
+- **Beautiful output** - Rich terminal formatting with colors and tables
+- **Safe reboot** - Check for active streams before rebooting your server
 
-<code>sudo chmod +x ./now-playing</code>
+## Installation
 
-<b>Add your tautulli API key and URL</b>
+### Using pipx (recommended)
 
-<code>sudo nano ./now-playing</code>
+```bash
+pipx install now-playing-cli
+```
 
-<b>Move to /usr/local/bin/</b>
+### Using pip
 
-<code>sudo mv ./now-playing /usr/local/bin</code>
+```bash
+pip install now-playing-cli
+```
 
-<h3>Usage</h3>
+### From source
 
-<b>Run with now-playing</b>
-<code>now-playing</code>
+```bash
+git clone https://github.com/dangerouslaser/now-playing-cli.git
+cd now-playing-cli
+pip install .
+```
 
-<b>Monitor sessions and progress in real time</b>
-<code>now-playing --watch</code>
-<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-watch.png">
+### Optional: Secure credential storage
 
-<b>Show Library Stats</b>
-<code>now-playing --library</code>
-<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-library.png">
+For storing your API key in the system keychain instead of a config file:
 
-<b>Check for active sessions and reboot</b>
-<code>now-playing --reboot</code>
-<img src="https://github.com/dangerouslaser/now-playing-cli/blob/main/now-playing-reboot.png">
+```bash
+pip install now-playing-cli[keyring]
+```
 
+## Configuration
 
+Run the interactive setup to configure your Tautulli connection:
+
+```bash
+now-playing config
+```
+
+You'll be prompted for:
+- **Tautulli URL** - e.g., `http://localhost:8181` or `https://tautulli.example.com`
+- **API Key** - Found in Tautulli: Settings > Web Interface > API Key
+
+The configuration is stored in `~/.config/now-playing/config.json` with restricted permissions (readable only by you). If the `keyring` package is installed, your API key is stored in the system keychain instead.
+
+### Configuration commands
+
+```bash
+# View current configuration
+now-playing config --show
+
+# Remove all configuration
+now-playing config --clear
+```
+
+## Usage
+
+### Show current activity
+
+```bash
+now-playing
+```
+
+Displays all active Plex streams with user, title, progress, player info, and transcode status.
+
+### Monitor in real-time
+
+```bash
+now-playing watch
+```
+
+![watch mode](now-playing-watch.png)
+
+Live-updating display that shows stream progress in real-time. Press `Ctrl+C` to exit.
+
+Options:
+- `--interval, -i` - Refresh interval in seconds (default: 10)
+
+### Library statistics
+
+```bash
+now-playing library
+```
+
+![library stats](now-playing-library.png)
+
+Shows a table of all Plex libraries with item counts.
+
+### Reboot with safety check
+
+```bash
+now-playing reboot
+```
+
+![reboot check](now-playing-reboot.png)
+
+Checks for active streams and warns before rebooting. Useful for server maintenance.
+
+## Requirements
+
+- Python 3.9+
+- A running [Tautulli](https://tautulli.com/) instance connected to your Plex server
+
+## Upgrading from v1 (bash script)
+
+The Python version is a complete rewrite with several improvements:
+
+| Feature | v1 (bash) | v2 (Python) |
+|---------|-----------|-------------|
+| Configuration | Edit script directly | Interactive setup with `now-playing config` |
+| Credential storage | Plaintext in script | System keychain or config file with restricted permissions |
+| Error handling | Limited | Comprehensive with helpful messages |
+| Dependencies | curl, jq | Self-contained Python package |
+| Installation | Manual copy to /usr/local/bin | pip/pipx install |
+
+To upgrade:
+1. Remove the old script: `sudo rm /usr/local/bin/now-playing`
+2. Install the new version: `pipx install now-playing-cli`
+3. Run setup: `now-playing config`
+
+## License
+
+MIT
